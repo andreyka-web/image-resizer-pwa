@@ -9,7 +9,12 @@ self.addEventListener('install', (e) => {
         './index.html',
         './app.js',
         './style.css',
-        './img/'
+        './img/48.png',
+        './img/144.png',
+        './img/180.png',
+        './img/192.png',
+        './img/196.png',
+        './img/512.png',
       ])
     })
   );
