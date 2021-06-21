@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content="image resizing progressive web app" />
+    <meta name="theme-color" content="#82b1ff" />
+    <title>Image Resizing App</title>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/img/180.png" />
+    <link rel="icon" type="image/png" href="/img/48.png" />
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .row { 
+            width: 100%;
+        } 
+
+        #upload {
+            border: 2px dashed blue;
+            padding: 1em 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="center">
+            Image resizing PWA
+        </h1>
+
+
+        <div class="row">
+            <div id="upload">
+                <p>click here to resize an image</p>
+            </div>
+        </div>
+        select box
+
+        resized list | name size, dimentions (preview, save)
+    </div>
+
+    <script src="app.js"></script> 
+</body>
+
+</html>

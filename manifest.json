@@ -1,0 +1,38 @@
+{
+    "short_name": "ImgResizer",
+    "name": "Image Resizer",
+    "description": "We resize Images here :)",
+    "lang": "en-CA",
+    "icons": [
+        {
+            "src": "/img/144.png",
+            "type": "image/png",
+            "sizes": "144x144"
+        },
+        {
+            "src": "/img/180.png",
+            "type": "image/png",
+            "sizes": "180x180"
+        },
+        {
+            "src": "/img/192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/img/196.png",
+            "type": "image/png",
+            "sizes": "196x196",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/img/512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "./?v1",
+    "theme_color": "#82b1ff",
+    "background_color": "#e3f2fd",
+    "display": "standalone"
+}
