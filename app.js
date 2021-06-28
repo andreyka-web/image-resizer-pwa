@@ -11,28 +11,63 @@
         });
     }
 
+    let table = document.getElementsByTagName('tbody')[0];
+    let row = document.getElementById('table-row');
     let canvas = document.createElement('canvas');
     let ctx = canvas.getContext('2d');
-    canvas.width = 100;
-    canvas.height = 200;
-   // ctx.drawImage(img, 0,0, 100, 200);
-
-
     let inp = document.createElement('input');
+
     inp.type = 'file';
     inp.style.display = 'none';
-    inp.addEventListener('change', (e)=>{
-        createImageBitmap(inp.files[0]).then((bitmap)=> { 
-            console.log(bitmap.width, bitmap.height);
+    inp.addEventListener('change', (e) => {
+        if(inp.files.length === 0){
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
 
-            // save bitmap
+        let crow = row.cloneNode(true);
+        crow.removeAttribute('id');
+        table.appendChild(crow);
+        let image = crow.querySelectorAll('img')[0]
+
+        let [w, h] = [0, 0];
+        createImageBitmap(inp.files[0]).then((bitmap) => {
+            w = bitmap.width;
+            h = bitmap.height;
+            image.width = w >= h ? 120 : 120 * w / h;
+            image.height = h >= w ? 120 : 120 * h / w;
+
+            document.querySelector('#resized-list').appendChild(canvas);
+            setsize(100);
         })
-    });
 
+        let jpgBtn = crow.querySelector('a[name="jpg"]'); 
+        let quality = crow.querySelector('input[name="q"]');
+        let size = crow.querySelector('input[name="s"]');
+
+        quality.addEventListener('input', (e) => quality.closest('p').querySelector('span').innerHTML = e.target.value);
+        quality.addEventListener('change', (e) => writesize());        
+        size.addEventListener('input', (e) => setsize(e.target.value));
+        size.addEventListener('change', (e) => writesize(true));
+
+        let q = () => parseFloat((quality.value * 0.01).toFixed(2));
+        let setsize = (v) => {
+            size.closest('p').querySelector('span').innerHTML = `${Math.round(v * w / 100)}x${Math.round(v * h / 100)}`;
+            canvas.width  = Math.round(size.value * w / 100);
+            canvas.height = Math.round(size.value * h / 100);
+        }
+        let writesize = (d = false) => {
+            jpgBtn.href = canvas.toDataURL('image/jpeg', q());
+            if(d){
+                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+                jpgBtn.download = `${Date.now()}-${canvas.width}x${canvas.height}-${quality.value}.jpg`;
+            }
+            canvas.toBlob((blob) => crow.querySelector('i[name="jpg-size"]').innerHTML = `~ ${(blob.size / 1024).toFixed(1)} kb`, 'image/jpeg', q());            
+        }
+        image.src = URL.createObjectURL(inp.files[0]);
+        image.onload = () => ctx.drawImage(image, 0, 0);
+    });
     document.body.appendChild(inp);
-
-    document.querySelector('#upload').addEventListener('click', (e) => {
-        console.log('clicked');
-        inp.click();
-    });
+    document.querySelector('#upload').addEventListener('click', (e) => inp.click());
 })()
