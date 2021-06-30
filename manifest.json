@@ -31,7 +31,7 @@
             "sizes": "512x512"
         }
     ],
-    "start_url": "./image-resizer-pwa/?v1",
+    "start_url": "./?v1",
     "theme_color": "#82b1ff",
     "background_color": "#e3f2fd",
     "display": "standalone"
