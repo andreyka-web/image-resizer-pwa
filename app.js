@@ -30,7 +30,7 @@
             let crow = row.cloneNode(true);
             crow.removeAttribute('id');
             table.appendChild(crow);
-            let image = crow.querySelectorAll('img')[0]
+            let image = crow.querySelectorAll('img')[0];
             let jpgBtn = crow.querySelector('a[name="jpg"]');
             let quality = crow.querySelector('input[name="q"]');
             let size = crow.querySelector('input[name="s"]');
@@ -42,23 +42,21 @@
 
                 image.width = w >= h ? 120 : 120 * w / h;
                 image.height = h >= w ? 120 : 120 * h / w;
-
-                document.querySelector('#resized-list').appendChild(canvas);
-
-                image.onload = async () => await writesize(true);
+                image.onload = () => writesize(true);
                 image.src = URL.createObjectURL(file);
-            })
+            });
 
             quality.addEventListener('input', (e) => quality.closest('p').querySelector('span').innerHTML = e.target.value);
             quality.addEventListener('change', (e) => writesize());
             size.addEventListener('input', (e) => setsize(e.target.value));
             size.addEventListener('change', (e) => writesize(true));
+            size.addEventListener('click', (e) => { console.log(`todo: ...`) })
 
             let q = () => parseFloat((quality.value * 0.01).toFixed(2));
             let setsize = (v) => {
-                size.closest('p').querySelector('span').innerHTML = `${Math.round(v * w / 100)}x${Math.round(v * h / 100)}`;
                 canvas.width = Math.round(v * w / 100);
                 canvas.height = Math.round(v * h / 100);
+                size.closest('p').querySelector('span').innerHTML = `${canvas.width}x${canvas.height}`;
             }
             let writesize = (d = false) => {
                 if (d) {
@@ -68,32 +66,22 @@
                 jpgBtn.href = canvas.toDataURL('image/jpeg', q());
                 jpgBtn.download = `${Date.now()}-${canvas.width}x${canvas.height}-${quality.value}.jpg`;
                 canvas.toBlob((blob) => crow.querySelector('i[name="jpg-size"]').innerHTML = `~ ${(blob.size / 1024).toFixed(1)} kb`, 'image/jpeg', q());
-                console.log(`writesize`);
             }
         });
     });
 
+    document.querySelector('#resized-list').appendChild(canvas);
+
     document.body.appendChild(inp);
     document.querySelector('#upload').addEventListener('click', (e) => inp.click());
     document.querySelector('#upload').addEventListener('dragover', (e) => e.preventDefault());
-    document.querySelector('#upload').addEventListener('drop', (e) => {
-        console.log(`files dropped`);
+    document.querySelector('#upload').addEventListener('drop', (e) => { 
         e.preventDefault();
         if (e.dataTransfer.items) {
-            // for (let i = 0; i < e.dataTransfer.items.length; i++) {
-            //     if (e.dataTransfer.items[i].kind === 'file') {
-            //         let file = e.dataTransfer.items[i].getAsFile();
-                    inp.files = e.dataTransfer.files;
-                    // console.log(e.dataTransfer);
-
-                    // vanilla JS
-                    let event = document.createEvent("UIEvents");
-                    event.initUIEvent("change", true, true);
-                    inp.dispatchEvent(event);
-
-                    // console.log(file);
-            //     }
-            // }
+            inp.files = e.dataTransfer.files;
+            let event = document.createEvent("UIEvents");
+            event.initUIEvent("change", true, true);
+            inp.dispatchEvent(event);
         } else {
             console.log(e.dataTransfer.items);
         }
