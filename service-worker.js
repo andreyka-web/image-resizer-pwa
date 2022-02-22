@@ -12,10 +12,13 @@ self.addEventListener('install', (e) => {
         './img/'
       ])
     })
+    .catch((error) => console.error(error))
   );
 });
 
 self.addEventListener('fetch', function (event) {
+  if(!(event.request.url.indexOf('http') === 0)) return; // skip the request if request is not made with http protocol
+
   event.respondWith(caches.match(event.request).then(function (response) {
     // caches.match() always resolves
     // but in case of success response will have value
